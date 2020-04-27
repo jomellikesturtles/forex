@@ -1,0 +1,23 @@
+<!-- <p>forex-unit works!</p> -->
+Current Time: {{currentTime}}
+<div *ngIf="procLoading" style='height: 100%;
+width: 100%;
+position: fixed;'>
+  <div class="spinner-border text-primary" role="status">
+    <span class="sr-only">Loading...</span>
+  </div>
+</div>
+<div style='color:red'>{{errorCallbackMessage}}</div>
+<!-- <div *ngIf="procLoading" class="spinner-border text-primary" role="status">
+  <span class="sr-only">Loading...</span>
+</div> -->
+<div id='exchangeList' style='display: flex;
+flex-flow: wrap;'>
+
+  <div *ngFor="let item of exchangeList">
+    <div style='margin: 10px;'>
+      <app-forex-single-unit [rate]='item' [rateName]='item.name'></app-forex-single-unit>
+    </div>
+  </div>
+
+</div>

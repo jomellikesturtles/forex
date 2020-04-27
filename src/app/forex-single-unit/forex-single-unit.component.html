@@ -1,0 +1,22 @@
+<div class='forex-single-unit'>
+  <img [src]='baseFlagUrl'>
+  <img [src]='targetFlagUrl'>
+  <div style='display: flex;'>
+    <!-- <img src="https://www.countryflags.io/be/shiny/64.png"> -->
+    <!-- <img [src]="'https://www.countryflags.io/'+getCountryCode(pairsDisplay.target)+'/shiny/64.png'"> -->
+    <!-- <label>{{rate.name|splitPair}}</label> -->
+    <p style='font-weight: bold;'>{{pairsDisplay.base}}</p>
+    <p>{{pairsDisplay.separator}}</p>
+    <p>{{pairsDisplay.target}}</p>
+    &nbsp;
+    <p>{{rate.rate|fixedDecimalPipe}}</p>
+  </div>
+  <div style='display: flex;color:gray'>
+    <p>{{pairsDisplay.base}}</p>
+    <p>{{pairsDisplay.separator}}</p>
+    <p style='font-weight: bold;'>{{pairsDisplay.target}}</p>
+    &nbsp;
+    <p>{{rate.rate2|fixedDecimalPipe}}</p>
+  </div>
+
+</div>
