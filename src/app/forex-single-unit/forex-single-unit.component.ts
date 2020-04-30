@@ -46,11 +46,12 @@ export class ForexSingleUnitComponent implements OnInit, OnChanges {
 
   constructor() { this._rateChange = rate_change.STEADY.toString() }
 
-  ngOnInit(): void {
+  ngOnChanges(changes: import("@angular/core").SimpleChanges): void {
+    console.log('onchanges')
+    // throw new Error("Method not implemented.");
   }
 
-  ngOnChanges(change: any) {
-    console.log('change: ', change)
+  ngOnInit(): void {
   }
 
   getBaseRate(value: String) {
@@ -62,13 +63,14 @@ export class ForexSingleUnitComponent implements OnInit, OnChanges {
   }
 
   getFlagsUrl(value) {
-    this.baseFlagUrl = `https://www.countryflags.io/${value.substr(0, 2)}/shiny/64.png`
-    this.targetFlagUrl = `https://www.countryflags.io/${value.substr(3, 2)}/shiny/64.png`
+    if (navigator.onLine) {
+      this.baseFlagUrl = `https://www.countryflags.io/${value.substr(0, 2)}/shiny/64.png`
+      this.targetFlagUrl = `https://www.countryflags.io/${value.substr(3, 2)}/shiny/64.png`
+    } else {
+      this.baseFlagUrl = `assets/No_flag.svg.png`
+      this.targetFlagUrl = `../../assets/No_flag.svg.png`
+    }
   }
-  // getCountryCode(value) {
-  //   https://www.countryflags.io/be/shiny/64.png
-  //   return value.substr(0, 2)
-  // }
 }
 
 interface IPairsDisplay {

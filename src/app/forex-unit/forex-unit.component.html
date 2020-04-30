@@ -1,23 +1,86 @@
 <!-- <p>forex-unit works!</p> -->
-Current Time: {{currentTime}}
-<div *ngIf="procLoading" style='height: 100%;
-width: 100%;
-position: fixed;'>
-  <div class="spinner-border text-primary" role="status">
-    <span class="sr-only">Loading...</span>
-  </div>
-</div>
-<div style='color:red'>{{errorCallbackMessage}}</div>
-<!-- <div *ngIf="procLoading" class="spinner-border text-primary" role="status">
-  <span class="sr-only">Loading...</span>
-</div> -->
-<div id='exchangeList' style='display: flex;
-flex-flow: wrap;'>
+<div class='container'>
 
-  <div *ngFor="let item of exchangeList">
-    <div style='margin: 10px;'>
-      <app-forex-single-unit [rate]='item' [rateName]='item.name'></app-forex-single-unit>
+  <!-- <div *ngIf="procLoading" style='height: 100%;
+width: 100%;'>
+    <div class="spinner-border text-primary" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div> -->
+  <div style='color:red'>{{errorCallbackMessage}}</div>
+
+  <select id='' class="form-control" [(ngModel)]='viewMode' style='width: 200px; float:right;'>
+    <option value='table'>Table</option>
+    <option value='grid'>Grid</option>
+    <option value='compare'>Compare</option>
+  </select>
+
+  Current Time: {{currentTime}}
+  Last Update: {{lastUpdateTime}}
+  <div [ngSwitch]='viewMode'>
+
+    <div *ngSwitchCase='"compare"'>
+      <div id='exchangeRateContainer' style='border:
+      solid thin;border-radius: 20px;padding: 20px; max-width: 800px;'>
+        <div class='row'>
+          <div class='col-md-7'>
+            <div>
+              <!-- <img [src]='baseFlagUrl'> -->
+              <!-- <div style='display:inline-flex'> -->
+              <div class='row'>
+                <div class='col-sm-4'>
+
+                  <select class="form-control" (ngModelChange)='onUpdatePair($event,"base");baseValueInput.value=1'
+                    [disabled]='true' [(ngModel)]='selectedBase' value='USD' style='width: 100%; float:right;'>
+                    <option *ngFor="let item of codesList" [value]='item'>
+                      {{item}}</option>
+                  </select>
+                </div>
+                <div class='col-sm-8'>
+                  <input #baseValueInput class="form-control" [(ngModel)]='valueBase' type='number'
+                    [disabled]='selectedBase==""' (ngModelChange)='
+      onUpdatePairValues($event,"base")' />
+                </div>
+              </div>
+            </div>
+            <!-- <div style='display:inline-flex'> -->
+            <!-- <img [src]='targetFlagUrl'> -->
+            <div class='row' style='margin-top: 20px;'>
+              <div class='col-sm-4'>
+                <select class="form-control" (ngModelChange)='onUpdatePair($event,"target");baseValueInput.value=1'
+                  [(ngModel)]=' selectedTarget' style='width: 100%; float:right;'>
+                  <option *ngFor="let item of codesListWithoutUSD" [value]='item'>
+                    {{item}}</option>
+                </select>
+              </div>
+              <div class='col-sm-8'>
+                <input class="form-control" [(ngModel)]='valueTarget' type='number' #targetValueInput
+                  [disabled]='selectedTarget=="" || procFetchRate'
+                  (ngModelChange)='onUpdatePairValues($event,"target")' />
+              </div>
+            </div>
+            <!-- </div> -->
+          </div>
+          <div class='col-md-5'>
+            <p>1 {{selectedBaseFullName}}</p>
+
+            <div *ngIf="procFetchRate" class="spinner-border text-primary" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+            <h3 *ngIf="!procFetchRate">{{conversionMessage}}</h3>
+            <!-- <h3 *ngIf="!procFetchRate">{{exchangeRate}}
+              {{selectedTargetFullName}}</h3> -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngSwitchCase='"grid"'>
+      <app-forex-grid (childUpdateTime)='setLastUpdateTime($event)'></app-forex-grid>
+    </div>
+
+    <div *ngSwitchCase='"table"'>
+      <app-forex-table (childUpdateTime)='setLastUpdateTime($event)'></app-forex-table>
     </div>
   </div>
-
 </div>
