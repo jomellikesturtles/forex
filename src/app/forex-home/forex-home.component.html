@@ -1,0 +1,24 @@
+<div class='container'>
+
+  <select id='' class="form-control" [(ngModel)]='viewMode' style='width: 200px; float:right;'>
+    <option value='table'>Table</option>
+    <option value='grid'>Grid</option>
+    <option value='compare'>Compare</option>
+  </select>
+
+  Last Update: {{lastUpdateTime}}
+  <div [ngSwitch]='viewMode'>
+
+    <div *ngSwitchCase='"compare"'>
+      <app-forex-compare></app-forex-compare>
+    </div>
+
+    <div *ngSwitchCase='"grid"'>
+      <app-forex-grid (childUpdateTime)='setLastUpdateTime($event)'></app-forex-grid>
+    </div>
+
+    <div *ngSwitchCase='"table"'>
+      <app-forex-table (childUpdateTime)='setLastUpdateTime($event)'></app-forex-table>
+    </div>
+  </div>
+</div>

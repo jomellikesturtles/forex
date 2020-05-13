@@ -4,20 +4,18 @@ import { FormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { ForexUnitComponent } from './forex-unit/forex-unit.component';
 import { HttpClientModule } from '@angular/common/http';
-import { RouterModule } from '@angular/router';
 import { ForexSingleUnitComponent, SplitPairPipe, FixedDecimalPipe } from './forex-single-unit/forex-single-unit.component';
-import { Utils } from './Utils';
 import { ForexGridComponent } from './forex-grid/forex-grid.component';
 import { ForexTableComponent } from './forex-table/forex-table.component';
 import { ForexMultiComponent } from './forex-multi/forex-multi.component';
+import { ForexHomeComponent } from './forex-home/forex-home.component';
+import { ForexCompareComponent } from './forex-compare/forex-compare.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ForexUnitComponent,
-    ForexSingleUnitComponent, SplitPairPipe, FixedDecimalPipe, ForexGridComponent, ForexTableComponent, ForexMultiComponent
+    ForexSingleUnitComponent, SplitPairPipe, FixedDecimalPipe, ForexGridComponent, ForexTableComponent, ForexMultiComponent, ForexHomeComponent, ForexCompareComponent
   ],
   imports: [
     FormsModule,

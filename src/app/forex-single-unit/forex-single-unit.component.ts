@@ -1,5 +1,5 @@
 import { Component, OnInit, OnChanges, Input, Pipe, PipeTransform } from '@angular/core';
-import { rate_change, exchange } from '../forex-unit/forex-unit.component';
+import { rate_change, exchange } from '../interfaces';
 
 @Component({
   selector: 'app-forex-single-unit',
@@ -21,6 +21,7 @@ export class ForexSingleUnitComponent implements OnInit, OnChanges {
   baseFlagUrl
   targetFlagUrl
   private _rateName
+
   @Input()
   set rateName(val: any) {
     this._rateName = val
@@ -48,16 +49,22 @@ export class ForexSingleUnitComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: import("@angular/core").SimpleChanges): void {
     console.log('onchanges')
-    // throw new Error("Method not implemented.");
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void { }
 
+  /**
+   * Gets the base rate from rate pair (ie. 'USDPHP' becomes 'USD')
+   * @param value the base rate
+   */
   getBaseRate(value: String) {
     return value.substr(0, 3)
   }
 
+  /**
+   * Gets the target rate from rate pair (ie. 'USDPHP' becomes 'PHP')
+   * @param value the target rate
+   */
   getTargetRate(value: String) {
     return value.substr(3, 3)
   }

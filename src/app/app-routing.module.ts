@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { ForexUnitComponent } from './forex-unit/forex-unit.component';
+import { ForexHomeComponent } from './forex-home/forex-home.component';
 
 
 const routes: Routes = [
 
   { path: '', redirectTo: '/index', pathMatch: 'full' }, // for fast boot?
-  { path: 'index', component: ForexUnitComponent },
+  { path: 'index', component: ForexHomeComponent },
 ];
 
 @NgModule({

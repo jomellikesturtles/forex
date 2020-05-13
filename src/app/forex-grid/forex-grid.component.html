@@ -1,6 +1,5 @@
 <div id='exchangeList' style='display: flex;
       flex-flow: wrap;width: 100%;'>
-
   <div *ngFor="let item of exchangeList">
     <div style='margin: 10px;'>
       <app-forex-single-unit [rate]='item' [rateName]='item.name'></app-forex-single-unit>

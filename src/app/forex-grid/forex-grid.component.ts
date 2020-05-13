@@ -4,7 +4,7 @@ import { pipe } from 'rxjs';
 import * as supported_pairs from '../supported_pairs.json'
 import * as iso_4217 from '../iso_4217.json'
 import { Utils } from '../Utils'
-import { forex_api_res } from '../forex-unit/forex-unit.component';
+import { forex_api_res } from '../interfaces';
 import { ForexMultiComponent } from '../forex-multi/forex-multi.component';
 
 @Component({
@@ -13,13 +13,13 @@ import { ForexMultiComponent } from '../forex-multi/forex-multi.component';
   styleUrls: ['./forex-grid.component.scss']
 })
 export class ForexGridComponent extends ForexMultiComponent implements OnInit {
-  // export class ForexGridComponent implements OnInit {
 
   @Output() childUpdateTime = new EventEmitter<any>()
+
   exchangeList = []
   procLoading = false
   errorCallbackMessage
-  pairsSubscription
+
   constructor(private forexService: ForexService, private cdr: ChangeDetectorRef) {
     super()
   }
@@ -51,7 +51,6 @@ export class ForexGridComponent extends ForexMultiComponent implements OnInit {
     }, () => {
       this.procLoading = false
     })
-    // })
   }
 
   setFirstValues(e) {
@@ -70,7 +69,6 @@ export class ForexGridComponent extends ForexMultiComponent implements OnInit {
     Object.entries(e.rates).forEach(rate => {
       this.exchangeList.forEach(exUnit => {
         if (exUnit.name === rate[0]) {
-          // this.exchangeList.push(this.getGridRateValue(rate))
           exUnit = super.getRateValue(rate)
           return
         }

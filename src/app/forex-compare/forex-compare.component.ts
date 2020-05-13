@@ -1,21 +1,18 @@
 import {
-  Component, OnInit, Pipe, PipeTransform,
-  ChangeDetectorRef, ChangeDetectionStrategy
+  Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy
 } from '@angular/core';
 import { ForexService } from '../forex.service';
-import { pipe } from 'rxjs';
-import * as default_data from '../default_data.json'
 import * as supported_pairs from '../supported_pairs.json'
 import * as iso_4217 from '../iso_4217.json'
 import { Utils } from '../Utils'
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-forex-unit',
-  templateUrl: './forex-unit.component.html',
-  styleUrls: ['./forex-unit.component.scss']
+  selector: 'app-forex-compare',
+  templateUrl: './forex-compare.component.html',
+  styleUrls: ['./forex-compare.component.scss']
 })
-export class ForexUnitComponent implements OnInit {
+export class ForexCompareComponent implements OnInit {
   viewMode = 'grid'
 
   exchangeRate = 0
@@ -39,15 +36,13 @@ export class ForexUnitComponent implements OnInit {
   procLoading = true
   procFetchRate = false
   rateName = ''
-  errorCallbackMessage = ''
   codesList = []
   codesListWithoutUSD = []
   conversionMessage = 'Select a currency on the left.'
   lastUpdateTime = ''
 
   constructor(private forexService: ForexService,
-    private cdr: ChangeDetectorRef,
-  ) { }
+    private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     supported_pairs.supportedPairs.forEach((e: String) => {
@@ -57,30 +52,26 @@ export class ForexUnitComponent implements OnInit {
       }
     })
 
-    this.codesListWithoutUSD = this.codesList
+    this.codesListWithoutUSD = this.codesList // list without USD (USD Will be used in the first select element)
     const index = this.codesListWithoutUSD.indexOf('USD');
     if (index > -1) {
       this.codesListWithoutUSD.splice(index, 1);
     }
-
     this.cdr.detectChanges()
-
   }
 
   /**
    * Updates pair code from dropdown.
-   * @param e actual value
-   * @param f target or base
+   * @param currencyCode actual value
+   * @param type target or base
    */
-  onUpdatePair(currencyCode: String, f: String) {
-    const u = new Utils()
+  onUpdatePair(currencyCode: String, type: String) {
     this.conversionMessage = ''
-    if (f === 'target') {
+    if (type === 'target') {
       this.procFetchRate = true
-      // this.targetFlagUrl = u.getFlagUrl(e)
       const ratePair = `${this.selectedBase}${currencyCode}`
       this.forexService.getPairsValues(ratePair).subscribe((e: forex_api_res) => {
-        if (e.code === 200 && e.rates) {
+        if (e.code === 200 && e.rates) { // if successful
           this.exchangeRate = e.rates[ratePair]['rate']
           this.selectedTargetFullName = this.getCurrencyName(currencyCode)
           this.conversionMessage = this.exchangeRate + ' ' + this.selectedTargetFullName
@@ -93,9 +84,6 @@ export class ForexUnitComponent implements OnInit {
         this.procFetchRate = false
         this.cdr.detectChanges()
       })
-    }
-    else {
-      // this.baseFlagUrl = u.getFlagUrl(e)
     }
   }
 
@@ -114,11 +102,18 @@ export class ForexUnitComponent implements OnInit {
     this.cdr.detectChanges()
   }
 
+  /**
+   * Calculates the exchange rates.
+   */
   calculateExchangeRate() {
     this.valueTarget = this.exchangeRate * this.valueBase
     this.cdr.detectChanges()
   }
 
+  /**
+   * Gets the full name of the currency based on the code. (ie. PHP returns Philippine Peso).
+   * @returns currency name
+   */
   getCurrencyName(val: String) {
     const ret = iso_4217['default']['list'].find(e => e.AlphabeticCode === val)
     if (ret.Currency) {
@@ -128,11 +123,14 @@ export class ForexUnitComponent implements OnInit {
     }
   }
 
+  /**
+   * Updates the last update time
+   * @param val
+   */
   setLastUpdateTime(val) {
     const u = new Utils()
     this.lastUpdateTime = u.getCurrentTimeAndDate(val)
   }
-
 }
 
 export interface exchange {

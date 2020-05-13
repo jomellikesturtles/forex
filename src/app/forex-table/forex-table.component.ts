@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
 import * as supported_pairs from '../supported_pairs.json'
 import { ForexService } from '../forex.service';
-import { forex_api_res, exchange } from '../forex-unit/forex-unit.component';
+import { forex_api_res } from '../interfaces';
 import { ForexMultiComponent } from '../forex-multi/forex-multi.component';
 
 @Component({
@@ -22,8 +22,10 @@ export class ForexTableComponent extends ForexMultiComponent implements OnInit {
     this.getAllValues()
   }
 
+  /**
+   * Gets all the forex values.
+   */
   getAllValues() {
-
     this.procLoading = true
     const pairListStr = supported_pairs.supportedPairs.join(',')
     this.forexService.getPairsValues(pairListStr).subscribe((e: forex_api_res) => {
@@ -35,7 +37,7 @@ export class ForexTableComponent extends ForexMultiComponent implements OnInit {
           this.getPairValues(e)
         }, 20000)
       } else { // error
-        this.errorCallbackMessage = e['message']
+        this.errorCallbackMessage = e['message'] // display the error message
         this.exchangeList = super.getOfflineData()
         this.childUpdateTime.emit(this.exchangeList[0]['timestamp'])
         this.cdr.detectChanges()
@@ -60,11 +62,8 @@ export class ForexTableComponent extends ForexMultiComponent implements OnInit {
   }
 
   getPairValues(e) {
-    // this.exchangeList = []
     console.log('new vals ', e)
-    // this.currentTime = new Date(e.rates[0][1]['timestamp'])
     Object.entries(e.rates).forEach(rate => {
-      // this.exchangeList.find(exUnit => exUnit.name = rate[0])
       this.exchangeList.forEach(exUnit => {
         if (exUnit.name === rate[0]) {
           const myObj = super.getRateValue(rate)

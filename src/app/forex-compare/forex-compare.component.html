@@ -1,0 +1,45 @@
+<div id='exchangeRateContainer' style='border:
+      solid thin;border-radius: 20px;padding: 20px; max-width: 800px;'>
+  <div class='row'>
+    <div class='col-md-7'>
+      <div>
+        <div class='row'>
+          <div class='col-sm-4'>
+
+            <select class="form-control" (ngModelChange)='onUpdatePair($event,"base");baseValueInput.value=1'
+              [disabled]='true' [(ngModel)]='selectedBase' value='USD' style='width: 100%; float:right;'>
+              <option *ngFor="let item of codesList" [value]='item'>
+                {{item}}</option>
+            </select>
+          </div>
+          <div class='col-sm-8'>
+            <input #baseValueInput class="form-control" [(ngModel)]='valueBase' type='number'
+              [disabled]='selectedBase==""' (ngModelChange)='
+      onUpdatePairValues($event,"base")' />
+          </div>
+        </div>
+      </div>
+      <div class='row' style='margin-top: 20px;'>
+        <div class='col-sm-4'>
+          <select class="form-control" (ngModelChange)='onUpdatePair($event,"target");baseValueInput.value=1'
+            [(ngModel)]=' selectedTarget' style='width: 100%; float:right;'>
+            <option *ngFor="let item of codesListWithoutUSD" [value]='item'>
+              {{item}}</option>
+          </select>
+        </div>
+        <div class='col-sm-8'>
+          <input class="form-control" [(ngModel)]='valueTarget' type='number' #targetValueInput
+            [disabled]='selectedTarget=="" || procFetchRate' (ngModelChange)='onUpdatePairValues($event,"target")' />
+        </div>
+      </div>
+    </div>
+    <div class='col-md-5'>
+      <p>1 {{selectedBaseFullName}}</p>
+
+      <div *ngIf="procFetchRate" class="spinner-border text-primary" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+      <h3 *ngIf="!procFetchRate">{{conversionMessage}}</h3>
+    </div>
+  </div>
+</div>

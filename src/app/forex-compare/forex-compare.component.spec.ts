@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ForexUnitComponent } from './forex-unit.component';
+import { ForexCompareComponent } from './forex-compare.component';
 
-describe('ForexUnitComponent', () => {
-  let component: ForexUnitComponent;
-  let fixture: ComponentFixture<ForexUnitComponent>;
+describe('ForexCompareComponent', () => {
+  let component: ForexCompareComponent;
+  let fixture: ComponentFixture<ForexCompareComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ForexUnitComponent ]
+      declarations: [ ForexCompareComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ForexUnitComponent);
+    fixture = TestBed.createComponent(ForexCompareComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
