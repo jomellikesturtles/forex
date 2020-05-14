@@ -4,6 +4,7 @@ import {
 import { ForexService } from '../forex.service';
 import * as supported_pairs from '../supported_pairs.json'
 import * as iso_4217 from '../iso_4217.json'
+import * as default_data from '../default_data.json'
 import { Utils } from '../Utils'
 
 @Component({
@@ -13,7 +14,6 @@ import { Utils } from '../Utils'
   styleUrls: ['./forex-compare.component.scss']
 })
 export class ForexCompareComponent implements OnInit {
-  viewMode = 'grid'
 
   exchangeRate = 0
 
@@ -29,10 +29,6 @@ export class ForexCompareComponent implements OnInit {
   baseFlagUrl = ''
   targetFlagUrl = ''
 
-  pairList = []
-  exchangeList: exchange[] = []
-  pairsSubscription = null
-  currentTime = new Date()
   procLoading = true
   procFetchRate = false
   rateName = ''
@@ -66,6 +62,7 @@ export class ForexCompareComponent implements OnInit {
    * @param type target or base
    */
   onUpdatePair(currencyCode: String, type: String) {
+    const u = new Utils()
     this.conversionMessage = ''
     if (type === 'target') {
       this.procFetchRate = true
@@ -73,18 +70,40 @@ export class ForexCompareComponent implements OnInit {
       this.forexService.getPairsValues(ratePair).subscribe((e: forex_api_res) => {
         if (e.code === 200 && e.rates) { // if successful
           this.exchangeRate = e.rates[ratePair]['rate']
-          this.selectedTargetFullName = this.getCurrencyName(currencyCode)
-          this.conversionMessage = this.exchangeRate + ' ' + this.selectedTargetFullName
-          this.calculateExchangeRate()
-          const u = new Utils()
           this.lastUpdateTime = u.getCurrentTimeAndDate(e.rates[ratePair]['timestamp'])
         } else {
-          this.conversionMessage = 'Something went wrong.'
+          alert(
+            "You are either offline or connection to API is limited. We will display the offline data instead."
+          );
+          const theRes = this.getOfflineSingle(ratePair)
+          this.exchangeRate = theRes['rates'][ratePair]['rate']
+          this.lastUpdateTime = u.getCurrentTimeAndDate(theRes['rates'][ratePair]['timestamp'])
         }
+        this.selectedTargetFullName = this.getCurrencyName(currencyCode)
+        this.conversionMessage = this.exchangeRate + ' ' + this.selectedTargetFullName
+        this.calculateExchangeRate()
         this.procFetchRate = false
         this.cdr.detectChanges()
       })
     }
+  }
+
+  /**
+   * Gets the offline data from the json file.
+   * @param ratePair
+   */
+  getOfflineSingle(ratePair): any {
+    let toReturn;
+    Object.entries(default_data.rates).forEach((rate) => {
+      if (rate[0] === ratePair) {
+        toReturn = rate;
+      }
+    });
+    toReturn = {
+      rates: { [toReturn[0]]: toReturn[1] },
+      code: 200,
+    };
+    return toReturn;
   }
 
   /**

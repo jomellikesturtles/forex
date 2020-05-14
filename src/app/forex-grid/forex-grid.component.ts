@@ -1,9 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
 import { ForexService } from '../forex.service';
-import { pipe } from 'rxjs';
 import * as supported_pairs from '../supported_pairs.json'
-import * as iso_4217 from '../iso_4217.json'
-import { Utils } from '../Utils'
 import { forex_api_res } from '../interfaces';
 import { ForexMultiComponent } from '../forex-multi/forex-multi.component';
 
@@ -53,6 +50,9 @@ export class ForexGridComponent extends ForexMultiComponent implements OnInit {
     })
   }
 
+  /**
+   * Set the initial values.
+   */
   setFirstValues(e) {
     console.log(e)
     Object.entries(e.rates).forEach(rate => {
@@ -63,6 +63,9 @@ export class ForexGridComponent extends ForexMultiComponent implements OnInit {
     this.procLoading = false
   }
 
+  /**
+   * Set the values.
+   */
   getPairValues(e) {
     this.exchangeList = []
     console.log(e)
@@ -74,6 +77,7 @@ export class ForexGridComponent extends ForexMultiComponent implements OnInit {
         }
       })
     })
+    this.procLoading = false
     this.childUpdateTime.emit(this.exchangeList[0]['timestamp'])
   }
 

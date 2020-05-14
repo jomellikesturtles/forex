@@ -29,13 +29,12 @@ export class ForexTableComponent extends ForexMultiComponent implements OnInit {
     this.procLoading = true
     const pairListStr = supported_pairs.supportedPairs.join(',')
     this.forexService.getPairsValues(pairListStr).subscribe((e: forex_api_res) => {
-      console.log('e')
       if (e.code === 200) {
-        this.setFirstValues(e)
+        this.setFirsPairtValues(e)
         setInterval(() => {
           this.procLoading = true
           this.getPairValues(e)
-        }, 20000)
+        }, 20000) // refresh every 20 seconds
       } else { // error
         this.errorCallbackMessage = e['message'] // display the error message
         this.exchangeList = super.getOfflineData()
@@ -50,14 +49,16 @@ export class ForexTableComponent extends ForexMultiComponent implements OnInit {
     })
   }
 
-
-  setFirstValues(e) {
-    console.log('setting first vvalues: ', e)
+  /**
+   * Setting the first forex table values.
+   */
+  setFirsPairtValues(e) {
+    console.log('setting first values: ', e)
     Object.entries(e.rates).forEach(rate => {
       const myObj = super.getRateValue(rate)
       this.exchangeList.push(myObj)
     })
-    this.childUpdateTime.emit(this.exchangeList[0]['timestamp'])
+    this.childUpdateTime.emit(this.exchangeList[0]['timestamp']) // emit the last update timestamp
     // this.procLoading = false
   }
 
@@ -72,7 +73,7 @@ export class ForexTableComponent extends ForexMultiComponent implements OnInit {
         }
       })
     })
-    this.childUpdateTime.emit(this.exchangeList[0]['timestamp'])
+    this.childUpdateTime.emit(this.exchangeList[0]['timestamp']) // emit the last update timestamp
   }
 
 }
